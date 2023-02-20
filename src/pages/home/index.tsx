@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
+import CrmTable from 'src/views/components/crmTabel'
 
 const Home = () => {
   return (
@@ -22,13 +23,12 @@ const Home = () => {
       </Grid>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='ACL and JWT 🔒'></CardHeader>
+          <CardHeader title='لیست دانشجویان'></CardHeader>
           <CardContent>
-            <Typography sx={{ mb: 2 }}>
-              Access Control (ACL) and Authentication (JWT) are the two main security features of our template and are implemented in the starter-kit as well.
-            </Typography>
-            <Typography>Please read our Authentication and ACL Documentations to get more out of them.</Typography>
+            <Typography>لیست دانشجویانی که در دوره های بامبو شرکت کردهاند.</Typography>
+            
           </CardContent>
+        <CrmTable/>
         </Card>
       </Grid>
     </Grid>

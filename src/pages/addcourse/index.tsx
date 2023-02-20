@@ -12,10 +12,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import authConfig from 'src/configs/auth'
 import { useSnackbar } from "notistack";
-import AsyncSelect from 'react-select/async';
 import { ILesson, ITeacher } from 'src/@core/utils/types'
 import { useEffect, useState } from 'react'
-const InputsWrapper=styled(Box)<BoxProps>(({theme})=>({
+
+const InputsWrapper=styled(Box)<BoxProps>(({})=>({
   display:"flex",
   justifyContent:"center",
   alignItems:"center",
@@ -43,7 +43,7 @@ interface FormData {
 const AddCoursePage = () => {
   const [teachersOptions, setTeachersOptions] = useState<ITeacher[]>([]);
   const [lessonsOptions, setLessonsOptions] = useState<ILesson[]>([]);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
     title: yup.string().min(5).required(),
     cost: yup.number().min(3).required(),
@@ -51,7 +51,6 @@ const AddCoursePage = () => {
   })
   const {
     control,
-    setError,
     handleSubmit,
     formState: { errors }
   } = useForm({

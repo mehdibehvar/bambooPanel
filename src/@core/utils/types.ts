@@ -103,3 +103,19 @@ export interface ILesson {
   courses:     Course[];
   __v:         number;
 }
+export interface IStudent {
+  role:         string;
+  isActive:     boolean;
+  _id:          string;
+  fullName:     string;
+  email:        string;
+  password:     string;
+  birthDate:    string;
+  phoneNumber:  string;
+  nationalId:   string;
+  profile:      string;
+  registerDate: Date;
+  courses:      any[];
+  salt:         string;
+  __v:          number;
+}

@@ -1,7 +1,8 @@
+axios.defaults.baseURL=process.env.NEXT_PUBLIC_BASE_URL;
+
 // ** React Imports
 import { createContext, useEffect, useState, ReactNode } from 'react'
 import jwt_decode from "jwt-decode";
-// ** Next Import
 import { useRouter } from 'next/router'
 
 // ** Axios
@@ -11,8 +12,8 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, RegisterParams, LoginParams, ErrCallbackType, UserDataType } from './types'
-axios.defaults.baseURL=process.env.NEXT_PUBLIC_BASE_URL;
+import { AuthValuesType, RegisterParams, LoginParams, ErrCallbackType, UserDataType } from './types';
+
 // ** Defaults
 const defaultProvider: AuthValuesType = {
   user: null,

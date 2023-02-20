@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, useState, Fragment, MouseEvent, useRef } from 'react'
+import { ReactNode, useState, MouseEvent } from 'react'
 
 // ** Next Import
 import Link from 'next/link'
@@ -7,7 +7,7 @@ import Link from 'next/link'
 // ** MUI Components
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import Checkbox from '@mui/material/Checkbox'
+
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
@@ -19,7 +19,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import Typography, { TypographyProps } from '@mui/material/Typography'
-import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
+
 
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
@@ -40,10 +40,8 @@ import { useAuth } from 'src/hooks/useAuth'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import { MenuItem, Select } from '@mui/material'
-import axios from 'axios'
-import authConfig from 'src/configs/auth'
+
 const defaultValues = {
   email: '',
   fullName: '',
@@ -67,24 +65,9 @@ interface FormData {
     profile:     string;
 }
 
-// ** Styled Components
-const RegisterIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  padding: theme.spacing(20),
-  paddingRight: '0 !important',
-  [theme.breakpoints.down('lg')]: {
-    padding: theme.spacing(10)
-  }
-}))
 
-const RegisterIllustration = styled('img')(({ theme }) => ({
-  maxWidth: '48rem',
-  [theme.breakpoints.down('xl')]: {
-    maxWidth: '38rem'
-  },
-  [theme.breakpoints.down('lg')]: {
-    maxWidth: '30rem'
-  }
-}))
+
+
 
 const RightWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   width: '100%',
@@ -102,7 +85,7 @@ const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({
     maxWidth: 400
   }
 }))
-const InputsWrapper=styled(Box)<BoxProps>(({theme})=>({
+const InputsWrapper=styled(Box)<BoxProps>(({})=>({
   display:"flex",
   justifyContent:"center",
   alignItems:"center",
@@ -115,13 +98,6 @@ const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: { marginTop: theme.spacing(8) }
 }))
 
-const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ theme }) => ({
-  marginBottom: theme.spacing(4),
-  '& .MuiFormControlLabel-label': {
-    fontSize: '0.875rem',
-    color: theme.palette.text.secondary
-  }
-}))
 const Register = () => {
   // ** States
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -161,8 +137,8 @@ const Register = () => {
    } = data;
    const bodyFormData = new FormData();
    console.log(profile);
-   
    bodyFormData.append('image', profile);
+   
   // const cloudurl=axios.post(authConfig.uploadEndpoint,bodyFormData
   //   ,{
   //     headers: {
@@ -193,7 +169,6 @@ const Register = () => {
     })
   }
 
-  const imageSource = skin === 'bordered' ? 'auth-v2-register-illustration-bordered' : 'auth-v2-register-illustration'
 
   return (
     <Box className='content-right'>
@@ -386,6 +361,7 @@ const Register = () => {
                     type={"file"}
                     label="عکس پروفایل"
                     value={value}
+                    onBlur={onBlur }
                     onChange={onChange}
                   />
            

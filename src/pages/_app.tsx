@@ -63,6 +63,7 @@ import 'src/iconify-bundle/icons-bundle-react'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import { SnackbarProvider } from 'notistack'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -130,8 +131,8 @@ const App = (props: ExtendedAppProps) => {
           <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
-
-        <AuthProvider>
+        <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+               <AuthProvider>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
               {({ settings }) => {
@@ -153,6 +154,8 @@ const App = (props: ExtendedAppProps) => {
             </SettingsConsumer>
           </SettingsProvider>
         </AuthProvider>
+        </SnackbarProvider>
+   
       </CacheProvider>
    
   )

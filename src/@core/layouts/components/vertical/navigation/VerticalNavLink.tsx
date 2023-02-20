@@ -130,7 +130,7 @@ const VerticalNavLink = ({
         className='nav-link'
         disabled={item.disabled || false}
         sx={{
-          mt: 1.5,
+          mt: 3,
           transition: 'padding .25s ease-in-out',
           px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`
         }}
@@ -168,7 +168,9 @@ const VerticalNavLink = ({
                 '& svg': {
                   ...(!parent ? { fontSize: '1.5rem' } : { fontSize: '0.5rem' }),
                   ...(parent && item.icon ? { fontSize: '0.875rem' } : {})
-                }
+                },
+                ml:2
+
               }}
             >
               <UserIcon icon={icon as string} />

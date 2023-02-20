@@ -1,6 +1,6 @@
 // ** React Imports
 import { createContext, useEffect, useState, ReactNode } from 'react'
-
+import jwt_decode from "jwt-decode";
 // ** Next Import
 import { useRouter } from 'next/router'
 
@@ -42,16 +42,18 @@ const AuthProvider = ({ children }: Props) => {
     const initAuth = async (): Promise<void> => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       if (storedToken) {
-        setLoading(true)
+        const decoded:any = jwt_decode(storedToken);
+        setLoading(true);
         await axios
-          .get(authConfig.meEndpoint, {
+          .get(`${authConfig.meEndpoint}/${decoded._id}`,
+            {
             headers: {
-              Authorization: storedToken
+              'x-auth-token': storedToken,
             }
           })
           .then(async response => {
-            setLoading(false)
-            setUser({ ...response.data.userData })
+            setLoading(false);  
+            setUser({ ...response.data.result})
           })
           .catch(() => {
             localStorage.removeItem('userData')
@@ -77,7 +79,6 @@ const AuthProvider = ({ children }: Props) => {
     axios
       .post(authConfig.loginEndpoint, {email,password})
       .then(async response => {
-        console.log(response);
         rememberMe
           ? window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.result.jwtToken)
           : null
@@ -103,7 +104,7 @@ const AuthProvider = ({ children }: Props) => {
     router.push('/login')
   }
 
-  const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
+  const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => { 
     axios
       .post(authConfig.registerEndpoint, params)
       .then(res => {

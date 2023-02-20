@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, useState, Fragment, MouseEvent } from 'react'
+import { ReactNode, useState, Fragment, MouseEvent, useRef } from 'react'
 
 // ** Next Import
 import Link from 'next/link'
@@ -41,8 +41,9 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
-import { MenuItem } from '@mui/material'
-
+import { MenuItem, Select } from '@mui/material'
+import axios from 'axios'
+import authConfig from 'src/configs/auth'
 const defaultValues = {
   email: '',
   fullName: '',
@@ -91,7 +92,7 @@ const RightWrapper = styled(Box)<BoxProps>(({ theme }) => ({
     maxWidth: 400
   },
   [theme.breakpoints.up('lg')]: {
-    maxWidth: 450
+    maxWidth: "100%"
   }
 }))
 
@@ -101,7 +102,12 @@ const BoxWrapper = styled(Box)<BoxProps>(({ theme }) => ({
     maxWidth: 400
   }
 }))
-
+const InputsWrapper=styled(Box)<BoxProps>(({theme})=>({
+  display:"flex",
+  justifyContent:"center",
+  alignItems:"center",
+  gap:8
+}))
 const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
   fontWeight: 600,
   letterSpacing: '0.18px',
@@ -151,13 +157,27 @@ const Register = () => {
       nationalId,
       address  ,
       role   ,
-   } = data
+      profile
+   } = data;
+   const bodyFormData = new FormData();
+   console.log(profile);
+   
+   bodyFormData.append('image', profile);
+  // const cloudurl=axios.post(authConfig.uploadEndpoint,bodyFormData
+  //   ,{
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data'
+  //     }
+  //   }
+  //   ).then(res=>console.log(res)
+  //  ).catch(err=>console.log(err)
+  //  );
     register({ email, fullName, password,phoneNumber,
       birthDate,
       nationalId,
       address  ,
       role   ,
-      profile:"avatar.png"}, err => {
+      profile}, err => {
       if (err.email) {
         setError('email', {
           type: 'manual',
@@ -177,7 +197,8 @@ const Register = () => {
 
   return (
     <Box className='content-right'>
-           <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>
+
+      <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>
         <Box
           sx={{
             p: 7,
@@ -273,8 +294,112 @@ const Register = () => {
                 {themeConfig.templateName}
               </Typography>
             </Box>
+            <Box sx={{ mb: 6 }}>
+              <TypographyStyled variant='h5'>ماجراجویی از اینجا شروع میشه🚀</TypographyStyled>
+              <Typography variant='body2'>با بامبو اپلیکیشن خود را مدیریت کنید.</Typography>
+            </Box>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+      <InputsWrapper>
+      <Box>
+             <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.nationalId)}>
+           کد ملی
+                </InputLabel>
+                <Controller
+                  name='nationalId'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <OutlinedInput
+                      value={value}
+                      label='کد ملی'
+                      onBlur={onBlur}
+                      onChange={onChange}
+      
+                      error={Boolean(errors.nationalId)}
+                 
+ 
+                    />
+                  )}
+                />
+                {errors.nationalId && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.nationalId.message}</FormHelperText>
+                )}
+              </FormControl>
+         
               <FormControl fullWidth sx={{ mb: 4 }}>
+                <Controller
+                  name='address'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <TextField
+                      value={value}
+                      label='ادرس'
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      error={Boolean(errors.address)}
+                      placeholder='address'
+                    />
+                  )}
+                />
+                {errors.address && <FormHelperText sx={{ color: 'error.main' }}>{errors.address.message}</FormHelperText>}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+              <InputLabel htmlFor='outlined-select-role' error={Boolean(errors.birthDate)}>
+              وضعیت
+                    </InputLabel>
+                <Controller
+                  name='role'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+             
+                  <Select
+                  id="outlined-select-role"
+                  label="وضعیت"
+                 value={value}
+                 onChange={onChange}
+                 onBlur={onBlur}
+                 
+                >
+                  {["admin","teacher"].map((option) => (
+                    <MenuItem key={option}  value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                 
+                </Select>
+                  )}
+                />
+                {errors.role && <FormHelperText sx={{ color: 'error.main' }}>{errors.role.message}</FormHelperText>}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <Controller
+                  name='profile'
+                  control={control}
+                  rules={{ required: true }}
+                 
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <TextField
+                    id="outlined-select-profile"
+                    type={"file"}
+                    label="عکس پروفایل"
+                    value={value}
+                    onChange={onChange}
+                  />
+           
+          
+                  )}
+                />
+                {errors.profile && <FormHelperText sx={{ color: 'error.main' }}>{errors.profile.message}</FormHelperText>}
+              </FormControl>
+              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4,fontSize:22 }}>
+              ثبت نام
+              </Button>
+     </Box>
+      <Box>
+        <FormControl fullWidth sx={{ mb: 4 }}>
                 <Controller
                   name='fullName'
                   control={control}
@@ -284,9 +409,9 @@ const Register = () => {
                       autoFocus
                       value={value}
                       onBlur={onBlur}
-                      label='fullName'
+                      label='نام کامل'
                       onChange={onChange}
-                      placeholder='johndoe'
+                      placeholder='مهدی بهور'
                       error={Boolean(errors.fullName)}
                     />
                   )}
@@ -303,7 +428,7 @@ const Register = () => {
                   render={({ field: { value, onChange, onBlur } }) => (
                     <TextField
                       value={value}
-                      label='Email'
+                      label='ایمیل'
                       onBlur={onBlur}
                       onChange={onChange}
                       error={Boolean(errors.email)}
@@ -315,7 +440,7 @@ const Register = () => {
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
                 <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
-                  Password
+                  رمز
                 </InputLabel>
                 <Controller
                   name='password'
@@ -324,7 +449,7 @@ const Register = () => {
                   render={({ field: { value, onChange, onBlur } }) => (
                     <OutlinedInput
                       value={value}
-                      label='Password'
+                      label='رمز'
                       onBlur={onBlur}
                       onChange={onChange}
                       id='auth-login-v2-password'
@@ -349,8 +474,8 @@ const Register = () => {
                 )}
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.phoneNumber)}>
-                phoneNumber
+                <InputLabel htmlFor='phonenumberId' error={Boolean(errors.phoneNumber)}>
+                شماره تلفن
                 </InputLabel>
                 <Controller
                   name='phoneNumber'
@@ -359,7 +484,7 @@ const Register = () => {
                   render={({ field: { value, onChange, onBlur } }) => (
                     <OutlinedInput
                       value={value}
-                      label='phoneNumber'
+                      label='شماره تلفن'
                       onBlur={onBlur}
                       onChange={onChange}
                       error={Boolean(errors.phoneNumber)}
@@ -373,8 +498,8 @@ const Register = () => {
                 )}
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.birthDate)}>
-                birthDate
+                <InputLabel htmlFor='auth-birth' error={Boolean(errors.birthDate)}>
+                تاریخ تولد
                 </InputLabel>
                 <Controller
                   name='birthDate'
@@ -383,10 +508,10 @@ const Register = () => {
                   render={({ field: { value, onChange, onBlur } }) => (
                     <OutlinedInput
                       value={value}
-                      label='birthDate'
+                      label='تاریخ تولد'
                       onBlur={onBlur}
                       onChange={onChange}
-                      id='auth-login-v2-password'
+                      id='auth-birth'
                       error={Boolean(errors.birthDate)}
  
                     />
@@ -396,95 +521,14 @@ const Register = () => {
                   <FormHelperText sx={{ color: 'error.main' }}>{errors.birthDate.message}</FormHelperText>
                 )}
               </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.nationalId)}>
-                nationalId
-                </InputLabel>
-                <Controller
-                  name='nationalId'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      label='nationalId'
-                      onBlur={onBlur}
-                      onChange={onChange}
-      
-                      error={Boolean(errors.nationalId)}
-                 
- 
-                    />
-                  )}
-                />
-                {errors.nationalId && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.nationalId.message}</FormHelperText>
-                )}
-              </FormControl>
-         
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='address'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      value={value}
-                      label='address'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.address)}
-                      placeholder='address'
-                    />
-                  )}
-                />
-                {errors.address && <FormHelperText sx={{ color: 'error.main' }}>{errors.address.message}</FormHelperText>}
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='role'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                    value={value}
-                    label='role'
-                    onBlur={onBlur}
-                    onChange={onChange}
-                    error={Boolean(errors.role)}
-                  />
-                  )}
-                />
-                {errors.role && <FormHelperText sx={{ color: 'error.main' }}>{errors.role.message}</FormHelperText>}
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='profile'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                    id="outlined-select-profile"
-                    type={"file"}
-                    label="profile"
-                  >
-                    {["admin","teacher"].map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  )}
-                />
-                {errors.role && <FormHelperText sx={{ color: 'error.main' }}>{errors.role.message}</FormHelperText>}
-              </FormControl>
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-                Sign up
-              </Button>
+        </Box>
+   
+      </InputsWrapper>
+           
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Typography sx={{ mr: 2, color: 'text.secondary' }}>Already have an account?</Typography>
+                <Typography sx={{ mr: 2, color: 'text.secondary' }}>ایا حساب کاربری دارید؟</Typography>
                 <Typography href='/login' component={Link} sx={{ color: 'primary.main', textDecoration: 'none' }}>
-                  Sign in instead
+                 اینجا وارد شوید.
                 </Typography>
               </Box>
               <Divider
@@ -534,18 +578,6 @@ const Register = () => {
           </BoxWrapper>
         </Box>
       </RightWrapper>
-      {/* {!hidden ? (
-        <Box sx={{ flex: 1, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
-          <RegisterIllustrationWrapper>
-            <RegisterIllustration
-              alt='register-illustration'
-              src={`/images/pages/${imageSource}-${theme.palette.mode}.png`}
-            />
-          </RegisterIllustrationWrapper>
-          <FooterIllustrationsV2 image={`/images/pages/auth-v2-register-mask-${theme.palette.mode}.png`} />
-        </Box>
-      ) : null} */}
- 
     </Box>
   )
 }

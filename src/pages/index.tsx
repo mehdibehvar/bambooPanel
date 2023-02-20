@@ -27,7 +27,7 @@ const Home = () => {
     if (!router.isReady) {
       return
     }
-console.log(auth);
+
 
     if (auth.user && auth.user.role) {
       const homeRoute = getHomeRoute(auth.user.role)

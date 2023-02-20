@@ -167,6 +167,7 @@ const Navigation = (props: Props) => {
                 setCurrentActiveGroup={setCurrentActiveGroup}
                 {...props}
               />
+       
             </List>
           )}
           {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static' ? afterNavMenuContent(props) : null}

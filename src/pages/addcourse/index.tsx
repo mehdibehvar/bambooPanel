@@ -40,7 +40,7 @@ interface FormData {
     lesson:    string;
 }
 
-const SecondPage = () => {
+const AddCoursePage = () => {
   const [teachersOptions, setTeachersOptions] = useState<ITeacher[]>([]);
   const [lessonsOptions, setLessonsOptions] = useState<ILesson[]>([]);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -281,4 +281,4 @@ useEffect(() => {
   )
 }
 
-export default SecondPage
+export default AddCoursePage

@@ -1,33 +1,33 @@
 // ** React Imports
-import { ReactNode, useState, MouseEvent } from 'react'
+import { ReactNode } from 'react'
 
 // ** Next Import
-import Link from 'next/link'
+
 
 // ** MUI Components
 import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
 
-import TextField from '@mui/material/TextField'
+
+
 import InputLabel from '@mui/material/InputLabel'
-import IconButton from '@mui/material/IconButton'
+
 import Box, { BoxProps } from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import { styled, useTheme } from '@mui/material/styles'
 import FormHelperText from '@mui/material/FormHelperText'
-import InputAdornment from '@mui/material/InputAdornment'
+
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+
 
 // ** Third Party Imports
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 // ** Configs
 import themeConfig from 'src/configs/themeConfig'
@@ -40,7 +40,7 @@ import { useAuth } from 'src/hooks/useAuth'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
-import { MenuItem, Select } from '@mui/material'
+
 import { uploadImage } from 'src/@core/utils/httpClient'
 
 const defaultValues = {
@@ -52,7 +52,7 @@ const defaultValues = {
   nationalId:"",
   address:"",
   role:"",
-  profile:"",
+  file:"",
 }
 interface FormData {
   fullName:    string;
@@ -63,7 +63,7 @@ interface FormData {
     nationalId:  string;
     address:     string;
     role:        string;
-    profile:     string;
+    file:     any;
 }
 
 
@@ -101,11 +101,13 @@ const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
 
 const Register = () => {
   // ** States
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  // const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  const { register,handleSubmit } = useForm()
 
   // ** Hooks
   const theme = useTheme()
-  const { register } = useAuth()
+  const { registerUser } = useAuth()
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -118,9 +120,7 @@ const Register = () => {
   })
 
   const {
-    control,
     setError,
-    handleSubmit,
     formState: { errors }
   } = useForm({
     defaultValues,
@@ -134,11 +134,15 @@ const Register = () => {
       nationalId,
       address  ,
       role   ,
-      profile
+      file
    } = data;
-const response=await uploadImage(profile);
+
+
+const response=await uploadImage(file);
+
+
 const cloudImageUrl=response?response:'profile.png';
-    register({ email, fullName, password,phoneNumber,
+registerUser({ email, fullName, password,phoneNumber,
       birthDate,
       nationalId,
       address  ,
@@ -264,283 +268,85 @@ const cloudImageUrl=response?response:'profile.png';
               <Typography variant='body2'>با بامبو اپلیکیشن خود را مدیریت کنید.</Typography>
             </Box>
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-      <InputsWrapper>
-      <Box>
-             <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.nationalId)}>
-           کد ملی
+          <InputsWrapper>
+            <Box sx={{ width: '100%' }}>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='nationalId' error={Boolean(errors.nationalId)}>
+                nationalId
                 </InputLabel>
-                <Controller
-                  name='nationalId'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      label='کد ملی'
-                      onBlur={onBlur}
-                      onChange={onChange}
-      
-                      error={Boolean(errors.nationalId)}
-                 
- 
-                    />
-                  )}
-                />
+                <OutlinedInput label='nationalId ' {...register('nationalId')} />
                 {errors.nationalId && (
                   <FormHelperText sx={{ color: 'error.main' }}>{errors.nationalId.message}</FormHelperText>
                 )}
               </FormControl>
-         
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='address'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      value={value}
-                      label='ادرس'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.address)}
-                      placeholder='address'
-                    />
-                  )}
-                />
-                {errors.address && <FormHelperText sx={{ color: 'error.main' }}>{errors.address.message}</FormHelperText>}
+                <InputLabel htmlFor='address' error={Boolean(errors.nationalId)}>
+                address
+                </InputLabel>
+                <OutlinedInput label='address ' {...register('address')} />
+                {errors.address && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.address.message}</FormHelperText>
+                )}
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
-              <InputLabel htmlFor='outlined-select-role' error={Boolean(errors.birthDate)}>
-              وضعیت
-                    </InputLabel>
-                <Controller
-                  name='role'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
+                <InputLabel htmlFor='lesson2' error={Boolean(errors.email)}>
+                email
+                </InputLabel>
+                <OutlinedInput label='توضیخات' {...register('email')} />
+                {errors.email && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>
+                )}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='fullName' error={Boolean(errors.fullName)}>
+                fullName
+                </InputLabel>
+                <OutlinedInput label='fullName ها' {...register('fullName')} />
+                {errors.fullName && <FormHelperText sx={{ color: 'error.main' }}>{errors.fullName.message}</FormHelperText>}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='password' error={Boolean(errors.password)}>
+                password
+                </InputLabel>
+                <OutlinedInput label='password ها' {...register('password')} />
+                {errors.password && <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>}
+              </FormControl>
+            </Box>
+            <Box sx={{ width: '100%' }}>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='lesson4' error={Boolean(errors.role)}>
+                role
+                </InputLabel>
+                <OutlinedInput label='role ' {...register('role')} />
+                {errors.role && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.role.message}</FormHelperText>
+                )}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='phoneNumber' error={Boolean(errors.phoneNumber)}>
+                phoneNumber
+                </InputLabel>
+                <OutlinedInput label='phoneNumber ' {...register('phoneNumber')} />
+            
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <InputLabel htmlFor='phoneNumber' error={Boolean(errors.birthDate)}>
+                birthDate
+                </InputLabel>
+                <OutlinedInput label='birthDate ' {...register('birthDate')} />
              
-                  <Select
-                  id="outlined-select-role"
-                  label="وضعیت"
-                 value={value}
-                 onChange={onChange}
-                 onBlur={onBlur}
-                 
-                >
-                  {["admin","teacher"].map((option) => (
-                    <MenuItem key={option}  value={option}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                 
-                </Select>
-                  )}
-                />
-                {errors.role && <FormHelperText sx={{ color: 'error.main' }}>{errors.role.message}</FormHelperText>}
               </FormControl>
+
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='profile'
-                  control={control}
-                  rules={{ required: true }}
-                 
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                    id="outlined-select-profile"
-                    type={"file"}
-                    label="عکس پروفایل"
-                    value={value}
-                    onBlur={onBlur }
-                    onChange={onChange}
-                  />
-           
-          
-                  )}
-                />
-                {errors.profile && <FormHelperText sx={{ color: 'error.main' }}>{errors.profile.message}</FormHelperText>}
+                <InputLabel htmlFor='image-input'>عکس</InputLabel>
+                <OutlinedInput id='image-input' type='file' {...register('file')} />
               </FormControl>
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4,fontSize:22 }}>
-              ثبت نام
+              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4, fontSize: 22 }}>
+                 ثبت نام
               </Button>
-     </Box>
-      <Box>
-        <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='fullName'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      autoFocus
-                      value={value}
-                      onBlur={onBlur}
-                      label='نام کامل'
-                      onChange={onChange}
-                      placeholder='مهدی بهور'
-                      error={Boolean(errors.fullName)}
-                    />
-                  )}
-                />
-                {errors.fullName && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.fullName.message}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='email'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      value={value}
-                      label='ایمیل'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.email)}
-                      placeholder='user@email.com'
-                    />
-                  )}
-                />
-                {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
-                  رمز
-                </InputLabel>
-                <Controller
-                  name='password'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      label='رمز'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      id='auth-login-v2-password'
-                      error={Boolean(errors.password)}
-                      type={showPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onMouseDown={e => e.preventDefault()}
-                            onClick={() => setShowPassword(!showPassword)}
-                          >
-                            <Icon icon={showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  )}
-                />
-                {errors.password && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.password.message}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='phonenumberId' error={Boolean(errors.phoneNumber)}>
-                شماره تلفن
-                </InputLabel>
-                <Controller
-                  name='phoneNumber'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      label='شماره تلفن'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.phoneNumber)}
-        
-    
-                    />
-                  )}
-                />
-                {errors.phoneNumber && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.phoneNumber.message}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-birth' error={Boolean(errors.birthDate)}>
-                تاریخ تولد
-                </InputLabel>
-                <Controller
-                  name='birthDate'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      label='تاریخ تولد'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      id='auth-birth'
-                      error={Boolean(errors.birthDate)}
- 
-                    />
-                  )}
-                />
-                {errors.birthDate && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.birthDate.message}</FormHelperText>
-                )}
-              </FormControl>
-        </Box>
-   
-      </InputsWrapper>
-           
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Typography sx={{ mr: 2, color: 'text.secondary' }}>ایا حساب کاربری دارید؟</Typography>
-                <Typography href='/login' component={Link} sx={{ color: 'primary.main', textDecoration: 'none' }}>
-                 اینجا وارد شوید.
-                </Typography>
-              </Box>
-              <Divider
-                sx={{
-                  '& .MuiDivider-wrapper': { px: 4 },
-                  mt: theme => `${theme.spacing(5)} !important`,
-                  mb: theme => `${theme.spacing(7.5)} !important`
-                }}
-              >
-                or
-              </Divider>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconButton
-                  href='/'
-                  component={Link}
-                  sx={{ color: '#497ce2' }}
-                  onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
-                >
-                  <Icon icon='mdi:facebook' />
-                </IconButton>
-                <IconButton
-                  href='/'
-                  component={Link}
-                  sx={{ color: '#1da1f2' }}
-                  onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
-                >
-                  <Icon icon='mdi:twitter' />
-                </IconButton>
-                <IconButton
-                  href='/'
-                  component={Link}
-                  onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
-                  sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : 'grey.300') }}
-                >
-                  <Icon icon='mdi:github' />
-                </IconButton>
-                <IconButton
-                  href='/'
-                  component={Link}
-                  sx={{ color: '#db4437' }}
-                  onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
-                >
-                  <Icon icon='mdi:google' />
-                </IconButton>
-              </Box>
-            </form>
+            </Box>
+          </InputsWrapper>
+        </form>
           </BoxWrapper>
         </Box>
       </RightWrapper>

@@ -22,7 +22,7 @@ const defaultProvider: AuthValuesType = {
   setLoading: () => Boolean,
   login: () => Promise.resolve(),
   logout: () => Promise.resolve(),
-  register: () => Promise.resolve()
+  registerUser: () => Promise.resolve()
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -112,7 +112,7 @@ const AuthProvider = ({ children }: Props) => {
         if (!res.data.success) {
           if (errorCallback) errorCallback(res.data.result)
         } else {
-          handleLogin({ email: params.email, password: params.password })
+          handleLogin({ email: params.email, password: params.password,rememberMe:true })
         }
       })
       .catch((err: { [key: string]: string }) => (errorCallback ? errorCallback(err) : null))
@@ -125,7 +125,7 @@ const AuthProvider = ({ children }: Props) => {
     setLoading,
     login: handleLogin,
     logout: handleLogout,
-    register: handleRegister
+    registerUser: handleRegister
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

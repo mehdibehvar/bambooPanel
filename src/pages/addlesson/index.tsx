@@ -4,8 +4,8 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import { useForm, Controller } from 'react-hook-form'
-import { Box, BoxProps, Button, FormControl, FormHelperText, InputLabel, OutlinedInput, TextField } from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { Box, BoxProps, Button, FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material'
 import styled from '@emotion/styled'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,6 +13,7 @@ import axios from 'axios'
 import dataConfig from 'src/configs/data'
 
 import { useSnackbar } from 'notistack'
+import { uploadImage } from 'src/@core/utils/httpClient'
 
 const InputsWrapper = styled(Box)<BoxProps>(({}) => ({
   display: 'flex',
@@ -28,28 +29,26 @@ const defaultValues = {
   lessonName: '',
   topics: 'front',
   description: '',
-  image: '',
+  file: '',
   category: 1
 }
 interface FormData {
   lessonName: string
   topics: string
   description: string
-  image: string
-  category: number
+  file: any
+  category: string
 }
 
 const AddLessonPage = () => {
+  const { register, handleSubmit } = useForm()
   const { enqueueSnackbar } = useSnackbar()
   const schema = yup.object().shape({
     title: yup.string().min(5).required(),
     description: yup.string().required(),
-    image: yup.string().required(),
     category: yup.number().required()
   })
   const {
-    control,
-    handleSubmit,
     formState: { errors }
   } = useForm({
     defaultValues,
@@ -58,18 +57,27 @@ const AddLessonPage = () => {
   })
 
   const onSubmit = async (data: FormData) => {
-    console.log(data)
-
-    const response = await axios.post(dataConfig.addLessonEndpoint, data)
+    const { lessonName, topics, description, file, category } = data;
+    const arrayTopics=topics.split(" ");
+    console.log(file);
+    
+if(file){
+  const res: any = await uploadImage(file)
+    console.log(res);
+    const response = await axios.post(dataConfig.addLessonEndpoint, { lessonName, topics:arrayTopics, description, image:res, category });
     console.log(response)
-
     if (response.data?.success) {
       enqueueSnackbar(response.data.message[0].message, {
         variant: 'success',
         autoHideDuration: 2000
       })
     }
+}
+  
+
+   
   }
+
 
   return (
     <Grid container spacing={6}>
@@ -80,102 +88,50 @@ const AddLessonPage = () => {
             <Typography>درس مورد نظر را اضافه کنید:</Typography>
           </CardContent>
         </Card>
+
         <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
           <InputsWrapper>
             <Box sx={{ width: '100%' }}>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.lessonName)}>
+                <InputLabel htmlFor='lesson1' error={Boolean(errors.lessonName)}>
                   نام درس
                 </InputLabel>
-                <Controller
-                  name='lessonName'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      label='lessonName'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.lessonName)}
-                    />
-                  )}
-                />
+                <OutlinedInput label='نام درس' {...register('lessonName')} />
                 {errors.lessonName && (
                   <FormHelperText sx={{ color: 'error.main' }}>{errors.lessonName.message}</FormHelperText>
                 )}
               </FormControl>
-
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='topics'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      value={value}
-                      label='topics'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.topics)}
-                      placeholder='topics'
-                    />
-                  )}
-                />
-                {errors.topics && <FormHelperText sx={{ color: 'error.main' }}>{errors.topics.message}</FormHelperText>}
+                <InputLabel htmlFor='lesson2' error={Boolean(errors.lessonName)}>
+                  توضیحات
+                </InputLabel>
+                <OutlinedInput label='توضیخات' {...register('description')} />
+                {errors.lessonName && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.lessonName.message}</FormHelperText>
+                )}
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='description'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      value={value}
-                      label='توضیحات'
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.description)}
-                      placeholder='توضیحات'
-                    />
-                  )}
-                />
-                {errors.description && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.description.message}</FormHelperText>
-                )}
+                <InputLabel htmlFor='lesson3' error={Boolean(errors.lessonName)}>
+                  سرفصل
+                </InputLabel>
+                <OutlinedInput label='سرفصل ها' {...register('topics')} />
+                {errors.topics && <FormHelperText sx={{ color: 'error.main' }}>{errors.topics.message}</FormHelperText>}
               </FormControl>
             </Box>
             <Box sx={{ width: '100%' }}>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='category'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      autoFocus
-                      value={value}
-                      onBlur={onBlur}
-                      label=' دسته بندی'
-                      onChange={onChange}
-                      error={Boolean(errors.category)}
-                    />
-                  )}
-                />
-                {errors.category && (
-                  <FormHelperText sx={{ color: 'error.main' }}>{errors.category.message}</FormHelperText>
+                <InputLabel htmlFor='lesson4' error={Boolean(errors.lessonName)}>
+                  دسته بندی
+                </InputLabel>
+                <OutlinedInput label='دسته بندی' {...register('category')} />
+                {errors.description && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.description.message}</FormHelperText>
                 )}
               </FormControl>
 
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='image'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField value={value} onBlur={onBlur} label='عکس' onChange={onChange} type='file' />
-                  )}
-                />
+                <InputLabel htmlFor='image-input'>عکس</InputLabel>
+                <OutlinedInput id='image-input' type='file' {...register('file')} />
               </FormControl>
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4, fontSize: 22 }}>
                 افزودن درس

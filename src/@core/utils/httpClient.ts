@@ -44,9 +44,9 @@ export const getAllTeachers = async (storedToken:any) => {
   return {};
 };
 
-   export const uploadImage=async(dataAdress:string)=>{
+   export const uploadImage=async(file:any)=>{
     const data = new FormData();
-  data.append('image', dataAdress);
+  data.append('image', file[0]);
 try {
   const response=await axios.post(dataConfig.uploadEndpoint,data,{
     headers:{

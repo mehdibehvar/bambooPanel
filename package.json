@@ -42,6 +42,9 @@
     "date-fns": "2.29.3",
     "draft-js": "0.11.7",
     "firebase": "9.13.0",
+    "form-data": "^4.0.0",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.0",
     "i18next": "22.0.4",
     "i18next-browser-languagedetector": "7.0.0",
     "i18next-http-backend": "2.0.0",
@@ -80,6 +83,7 @@
     "@iconify/utils": "2.0.1",
     "@types/cleave.js": "1.4.7",
     "@types/draft-js": "0.11.9",
+    "@types/fs-extra": "^11.0.1",
     "@types/jsonwebtoken": "8.5.9",
     "@types/node": "18.11.8",
     "@types/nprogress": "0.2.0",
@@ -117,5 +121,10 @@
     "react-credit-cards": {
       "react": "$react"
     }
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
   }
 }

@@ -59,7 +59,7 @@ const AddCoursePage = () => {
     resolver: yupResolver(schema)
   })
   const onSubmit = async(data: FormData) => {
-    console.log(data);
+
     
     const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!;
   const response= await axios

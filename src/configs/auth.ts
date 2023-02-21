@@ -5,7 +5,6 @@ export default {
   getAllLessonsEndpoint: '/api/lesson',
   loginEndpoint: '/api/auth/employee/login',
   registerEndpoint: '/api/auth/employee/register',
-  uploadEndpoint: '/api/upload/image',
   storageTokenKeyName: 'accessToken',
   onTokenExpiration: 'refreshToken' // logout | refreshToken
 }

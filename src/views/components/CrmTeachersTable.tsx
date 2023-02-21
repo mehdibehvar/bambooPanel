@@ -22,15 +22,15 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
-import { IStudent } from 'src/@core/utils/types';
-import { getAllStudents } from 'src/@core/utils/httpClient'
+import {  ITeacher } from 'src/@core/utils/types';
+import {  getAllTeachers } from 'src/@core/utils/httpClient'
 import { LoaderIcon } from 'react-hot-toast'
 
 
 
 
 interface CellType {
-  row: IStudent
+  row: ITeacher
 }
 
 interface RoleObj {
@@ -53,7 +53,7 @@ const roleObj: RoleObj = {
       </Box>
     )
   },
-  author: {
+  teacher: {
     icon: (
       <Box component='span' sx={{ display: 'flex', mr: 2, color: 'warning.main' }}>
         <Icon icon='mdi:cog' />
@@ -88,82 +88,9 @@ const statusObj: StatusObj = {
   false: { color: 'secondary' }
 }
 
-// const rows: TableBodyRowType[] = [
-//   {
-//     id: 1,
-//     role: 'admin',
-//     status: 'pending',
-//     name: 'Jordan Stevenson',
-//     username: '@jstevenson5c',
-//     email: 'susanna.Lind57@gmail.com',
-//     avatarSrc: '/images/avatars/1.png'
-//   },
-//   {
-//     id: 2,
-//     role: 'editor',
-//     status: 'active',
-//     name: 'Robert Crawford',
-//     username: '@rcrawford1d',
-//     avatarSrc: '/images/avatars/3.png',
-//     email: 'estelle.Bailey10@gmail.com'
-//   },
-//   {
-//     id: 3,
-//     role: 'author',
-//     status: 'inactive',
-//     name: 'Lydia Reese',
-//     username: '@lreese3b',
-//     email: 'milo86@hotmail.com',
-//     avatarSrc: '/images/avatars/2.png'
-//   },
-//   {
-//     id: 4,
-//     role: 'editor',
-//     status: 'pending',
-//     name: 'Richard Sims',
-//     username: '@rsims6f',
-//     email: 'lonnie35@hotmail.com',
-//     avatarSrc: '/images/avatars/5.png'
-//   },
-//   {
-//     id: 5,
-//     status: 'active',
-//     role: 'maintainer',
-//     name: 'Lucile Young',
-//     username: '@lyoung4a',
-//     email: 'ahmad_Collins@yahoo.com',
-//     avatarSrc: '/images/avatars/4.png'
-//   },
-//   {
-//     id: 6,
-//     role: 'editor',
-//     status: 'pending',
-//     name: 'Francis Frank',
-//     username: '@ffrank7e',
-//     avatarSrc: '/images/avatars/7.png',
-//     email: 'tillman.Gleason68@hotmail.com'
-//   },
-//   {
-//     id: 7,
-//     role: 'subscriber',
-//     status: 'inactive',
-//     name: 'Phoebe Patterson',
-//     email: 'otho21@gmail.com',
-//     username: '@ppatterson2g',
-//     avatarSrc: '/images/avatars/8.png'
-//   },
-//   {
-//     id: 8,
-//     status: 'active',
-//     role: 'subscriber',
-//     name: 'Curtis Underwood',
-//     username: '@cunderwood8h',
-//     avatarSrc: '/images/avatars/3.png',
-//     email: 'florencio.Little@hotmail.com'
-//   }
-// ]
 
-const renderUserAvatar = (row:IStudent) => {
+
+const renderUserAvatar = (row:ITeacher) => {
   if (row.profile) {
     return <CustomAvatar src={row.profile} sx={{ ml: 3, width: 34, height: 34 }} />
   } else {
@@ -180,7 +107,7 @@ const columns: GridColDef[] = [
     flex: 0.25,
     field: 'name',
     minWidth: 200,
-    headerName: 'دانشجو',
+    headerName: 'استاد',
     renderCell: ({ row }: CellType) => {
       return (
         <Box  sx={{ display: 'flex', alignItems: 'center' }}>
@@ -212,7 +139,7 @@ const columns: GridColDef[] = [
     renderCell: ({ row }: CellType) => (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
   {roleObj[row.role].icon}
-        <Typography sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>{row.role==="student"?"دانشجو":row.role==="admin"?"مدیر":"جدید"}</Typography>
+        <Typography sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>{row.role==="student"?"دانشجو":row.role==="admin"?"مدیر":row.role==="teacher"?"استاد":"جدید"}</Typography>
       </Box>
     )
   },
@@ -233,18 +160,19 @@ const columns: GridColDef[] = [
   }
 ]
 
-const CrmTable = () => {
-    const [students, setStudents] = useState<IStudent[]>([]);
+const CrmTeachersTable = () => {
+    const [teachers, setTeachers] = useState<ITeacher[]>([]);
     useEffect(() =>{
         const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
-       const getStudents=async (storedToken:any)=>{
-        const res=await getAllStudents(storedToken);
-         setStudents(res.result);
+       const getTeachers=async (storedToken:any)=>{
+        const res=await getAllTeachers(storedToken);
+        setTeachers(res.result);
        };
-       getStudents(storedToken);
+       getTeachers(storedToken);
     }, [])
 
-    const rows=students.map((item)=>{
+
+    const rows=teachers.map((item)=>{
     return {  id:item._id,
         email:item.email,
         fullName:item.fullName,
@@ -256,7 +184,7 @@ const CrmTable = () => {
 
     
   return (<>
-  {students?<Card>
+  {teachers?<Card>
       <DataGrid   autoHeight hideFooter rows={rows} columns={columns} disableSelectionOnClick pagination={undefined} />
     </Card>:<LoaderIcon/>}
   </>
@@ -264,4 +192,4 @@ const CrmTable = () => {
   )
 }
 
-export default CrmTable
+export default CrmTeachersTable

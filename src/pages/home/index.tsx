@@ -5,19 +5,17 @@ import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import CrmTable from 'src/views/components/crmTabel'
+import CrmTeachersTable from 'src/views/components/CrmTeachersTable'
 
 const Home = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Kick start your project 🚀'></CardHeader>
+          <CardHeader title='لیست استادها:'></CardHeader>
           <CardContent>
-            <Typography sx={{ mb: 2 }}>All the best for your new project.</Typography>
-            <Typography>
-              Please make sure to read our Template Documentation to understand where to go from here and how to use our
-              template.
-            </Typography>
+            <Typography sx={{ mb: 2 }}>لیست اساتید بامبو</Typography>
+            <CrmTeachersTable/>
           </CardContent>
         </Card>
       </Grid>

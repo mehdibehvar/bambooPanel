@@ -13,6 +13,11 @@ const navigation = (): VerticalNavItemsType => {
       path: '/addcourse',
       icon: 'mdi:file-outline',
     },
+    {
+      title: 'افزودن درس',
+      path: '/addlesson',
+      icon: 'mdi:file-outline',
+    },
 
   ]
 }

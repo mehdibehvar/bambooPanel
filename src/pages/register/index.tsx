@@ -41,6 +41,7 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
 import { MenuItem, Select } from '@mui/material'
+import { uploadImage } from 'src/@core/utils/httpClient'
 
 const defaultValues = {
   email: '',
@@ -127,7 +128,7 @@ const Register = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit =async (data: FormData) => {
     const { email, fullName, password,phoneNumber,
       birthDate,
       nationalId,
@@ -135,25 +136,14 @@ const Register = () => {
       role   ,
       profile
    } = data;
-   const bodyFormData = new FormData();
-   console.log(profile);
-   bodyFormData.append('image', profile);
-   
-  // const cloudurl=axios.post(authConfig.uploadEndpoint,bodyFormData
-  //   ,{
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data'
-  //     }
-  //   }
-  //   ).then(res=>console.log(res)
-  //  ).catch(err=>console.log(err)
-  //  );
+const response=await uploadImage(profile);
+const cloudImageUrl=response?response:'profile.png';
     register({ email, fullName, password,phoneNumber,
       birthDate,
       nationalId,
       address  ,
       role   ,
-      profile}, err => {
+      profile:cloudImageUrl}, err => {
       if (err.email) {
         setError('email', {
           type: 'manual',

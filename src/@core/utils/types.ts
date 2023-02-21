@@ -119,3 +119,20 @@ export interface IStudent {
   salt:         string;
   __v:          number;
 }
+export interface ITeacher {
+  role:         string;
+  isActive:     boolean;
+  _id:          string;
+  fullName:     string;
+  email:        string;
+  password:     string;
+  birthDate:    string;
+  phoneNumber:  string;
+  address:      string;
+  nationalId:   string;
+  profile:      string;
+  registerDate: Date;
+  courses:      Course[];
+  salt:         string;
+  __v:          number;
+}

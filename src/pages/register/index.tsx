@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 // ** Next Import
 
@@ -18,6 +18,7 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import { styled, useTheme } from '@mui/material/styles'
 import FormHelperText from '@mui/material/FormHelperText'
 
+import  FallbackSpinner  from "src/@core/components/spinner";
 import Typography, { TypographyProps } from '@mui/material/Typography'
 
 
@@ -42,6 +43,8 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 // ** Demo Imports
 
 import { uploadImage } from 'src/@core/utils/httpClient'
+import { MenuItem, Select } from '@mui/material'
+
 
 const defaultValues = {
   email: '',
@@ -102,7 +105,7 @@ const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
 const Register = () => {
   // ** States
   // const [showPassword, setShowPassword] = useState<boolean>(false)
-
+const [loading, setLoading] = useState<boolean>(false);
   const { register,handleSubmit } = useForm()
 
   // ** Hooks
@@ -137,7 +140,7 @@ const Register = () => {
       file
    } = data;
 
-
+   setLoading(true)
 const response=await uploadImage(file);
 
 
@@ -160,7 +163,8 @@ registerUser({ email, fullName, password,phoneNumber,
           message: err.fullName
         })
       }
-    })
+    });
+    setLoading(false);
   }
 
 
@@ -267,7 +271,7 @@ registerUser({ email, fullName, password,phoneNumber,
               <TypographyStyled variant='h5'>ماجراجویی از اینجا شروع میشه🚀</TypographyStyled>
               <Typography variant='body2'>با بامبو اپلیکیشن خود را مدیریت کنید.</Typography>
             </Box>
-            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+            {loading?<FallbackSpinner/>:   <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
           <InputsWrapper>
             <Box sx={{ width: '100%' }}>
               <FormControl fullWidth sx={{ mb: 4 }}>
@@ -317,7 +321,11 @@ registerUser({ email, fullName, password,phoneNumber,
                 <InputLabel htmlFor='lesson4' error={Boolean(errors.role)}>
                 role
                 </InputLabel>
-                <OutlinedInput label='role ' {...register('role')} />
+                <Select label='role ' {...register('role')} >
+                <MenuItem value={"admin"}>admin</MenuItem>
+               <MenuItem value={"teacher"}>teacher</MenuItem>
+                </Select>
+              
                 {errors.role && (
                   <FormHelperText sx={{ color: 'error.main' }}>{errors.role.message}</FormHelperText>
                 )}
@@ -346,7 +354,8 @@ registerUser({ email, fullName, password,phoneNumber,
               </Button>
             </Box>
           </InputsWrapper>
-        </form>
+        </form>}
+         
           </BoxWrapper>
         </Box>
       </RightWrapper>

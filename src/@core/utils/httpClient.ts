@@ -1,6 +1,7 @@
 import axios from "axios";
 import dataConfig from "src/configs/data";
 
+
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json; charset=UTF-8";
 axios.defaults.headers.common["Authorization"] = "AUTH_TOKEN";
@@ -43,6 +44,32 @@ export const getAllTeachers = async (storedToken:any) => {
 
   return {};
 };
+export const getAllCourses=async ()=>{
+  try {
+    const response=await axios.get(dataConfig.getAllCoursesEndpoint);
+  
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+}
+export const deleteCourseById=async (id:string,storedToken:string)=>{
+  try {
+    const response=await axios.delete(`${dataConfig.deleteCourseEndpoint}/${id}`,{
+      headers:{
+        "x-auth-token" :storedToken
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+}
 
    export const uploadImage=async(file:any)=>{
     const data = new FormData();

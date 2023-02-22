@@ -136,3 +136,24 @@ export interface ITeacher {
   salt:         string;
   __v:          number;
 }
+export interface ICourse {
+  teacher:   Teacher;
+  lesson:    ILesson;
+  _id:       string;
+  title:     string;
+  cost:      number;
+  endDate:   Date;
+  startDate: Date;
+  capacity:  number;
+  students:  Teacher[];
+  __v:       number;
+}
+
+
+
+export interface Teacher {
+  _id:      string;
+  fullName: string;
+  email:    string;
+  profile:  string;
+}

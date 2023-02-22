@@ -11,9 +11,10 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import dataConfig from 'src/configs/data'
-
+import  FallbackSpinner  from "src/@core/components/spinner";
 import { useSnackbar } from 'notistack'
 import { uploadImage } from 'src/@core/utils/httpClient'
+import { useState } from 'react'
 
 const InputsWrapper = styled(Box)<BoxProps>(({}) => ({
   display: 'flex',
@@ -55,23 +56,34 @@ const AddLessonPage = () => {
     mode: 'onBlur',
     resolver: yupResolver(schema)
   })
-
+const [loading, setLoading] = useState<boolean>(false);
   const onSubmit = async (data: FormData) => {
     const { lessonName, topics, description, file, category } = data;
     const arrayTopics=topics.split(" ");
-    console.log(file);
+  
     
 if(file){
-  const res: any = await uploadImage(file)
-    console.log(res);
+  setLoading(true)
+  const res: any = await uploadImage(file);
+  try {
     const response = await axios.post(dataConfig.addLessonEndpoint, { lessonName, topics:arrayTopics, description, image:res, category });
-    console.log(response)
+    setLoading(false);
     if (response.data?.success) {
       enqueueSnackbar(response.data.message[0].message, {
         variant: 'success',
         autoHideDuration: 2000
       })
     }
+    setLoading(false)
+  } catch (error) {
+    console.log(error);
+    setLoading(false)
+    enqueueSnackbar("خطایی رخ داده...", {
+      variant: 'warning',
+      autoHideDuration: 2000
+    })
+  }
+ 
 }
   
 
@@ -88,8 +100,7 @@ if(file){
             <Typography>درس مورد نظر را اضافه کنید:</Typography>
           </CardContent>
         </Card>
-
-        <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+{loading?<FallbackSpinner/>:  <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
           <InputsWrapper>
             <Box sx={{ width: '100%' }}>
               <FormControl fullWidth sx={{ mb: 4 }}>
@@ -138,7 +149,8 @@ if(file){
               </Button>
             </Box>
           </InputsWrapper>
-        </form>
+        </form>}
+      
       </Grid>
     </Grid>
   )

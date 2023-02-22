@@ -1,5 +1,7 @@
 // ** Type import
-import { VerticalNavItemsType } from 'src/@core/layouts/types'
+import { VerticalNavItemsType } from 'src/@core/layouts/types';
+
+
 
 const navigation = (): VerticalNavItemsType => {
   return [
@@ -11,13 +13,14 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'افزودن دوره',
       path: '/addcourse',
-      icon: 'mdi:file-outline',
+      icon: "mdi:add-circle-outline"
     },
     {
       title: 'افزودن درس',
       path: '/addlesson',
-      icon: 'mdi:file-outline',
+      icon: 'ic:round-note-add',
     },
+  
 
   ]
 }

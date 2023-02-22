@@ -26,6 +26,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import { deleteCourseById, getAllCourses } from 'src/@core/utils/httpClient'
 import { ICourse } from 'src/@core/utils/types'
 import { useSnackbar } from 'notistack'
+import EditModal from './editmodal'
 
 
 
@@ -37,13 +38,13 @@ const renderClient = (params: GridRenderCellParams) => {
   const color = states[stateNum]
 
   if (row.lesson.image) {
-    return <CustomAvatar src={`${row.lesson.image}`} sx={{ mr: 3, width: '1.875rem', height: '1.875rem' }} />
+    return <CustomAvatar src={`${row.lesson.image}`} sx={{  width: '1.875rem', height: '1.875rem' }} />
   } else {
     return (
       <CustomAvatar
         skin='light'
         color={color as ThemeColor}
-        sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
+        sx={{ fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
       >
         {getInitials(row.title ? row.title : 'John Doe')}
       </CustomAvatar>
@@ -58,6 +59,7 @@ const renderClient = (params: GridRenderCellParams) => {
 
 //////////com-----------------------///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const CourseDataGrid = () => {
+
   const { enqueueSnackbar } = useSnackbar();
   const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!;
 
@@ -72,7 +74,7 @@ useEffect(() => {
 setRows(res.result);
   };
 getCourses()
-}, [loading])
+}, [loading,rows])
 const handleDeleteCourse=async (id:string)=>{
   try {
     setLoading(true)
@@ -105,10 +107,10 @@ const handleDeleteCourse=async (id:string)=>{
         const { row } = params
 
         return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center',gap:3 }}>
             {renderClient(params)}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
+              <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600, }}>
                 {row.title}
               </Typography>
               <Typography noWrap variant='caption'>
@@ -174,6 +176,19 @@ const handleDeleteCourse=async (id:string)=>{
       </Button>
       )
     },
+    {
+      flex: 0.1,
+      field: 'edit',
+      minWidth: 80,
+      headerName: 'edit',
+      renderCell: (params: GridRenderCellParams) => {
+        const courseRow=params.row;
+
+        return (
+      <EditModal courseRow={courseRow}/>
+        )
+      }
+    },
  
 
  
@@ -182,11 +197,11 @@ const handleDeleteCourse=async (id:string)=>{
   return (
     <Card>
       <CardHeader
-        title='Column'
+        title='دوره ها'
         action={
           <div>
             <Button size='small' variant='contained' onClick={() => setHideNameColumn(!hideNameColumn)}>
-              Toggle Name Column
+              مخفی کردن نام دوره
             </Button>
           </div>
         }

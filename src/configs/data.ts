@@ -3,6 +3,7 @@ export default {
     getAllTeachersEndpoint: '/api/employee/getallteachers',
     getAllCoursesEndpoint: 'api/course/getall',
     deleteCourseEndpoint: '/api/course',
+    editCourseEndpoint: '/api/course',
     uploadEndpoint: '/api/upload/image',
     addLessonEndpoint: '/api/lesson/add',
   }

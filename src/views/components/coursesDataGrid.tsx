@@ -99,7 +99,7 @@ const handleDeleteCourse=async (id:string)=>{
   const columns: GridColDef[] = [
     {
       flex: 0.25,
-      minWidth: 290,
+      minWidth: 170,
       field: 'title',
       headerName: 'title',
       hide: hideNameColumn,
@@ -128,7 +128,7 @@ const handleDeleteCourse=async (id:string)=>{
       field: 'start_date',
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {new Date(params.row.startDate).toLocaleDateString('de-DE')}
+          {new Date(params.row.startDate).toLocaleDateString()}
         </Typography>
       )
     },
@@ -139,7 +139,7 @@ const handleDeleteCourse=async (id:string)=>{
       headerName: 'cost',
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.cost}
+          {params.row.cost.toLocaleString("fa-IR")}
         </Typography>
       )
     },
@@ -150,7 +150,7 @@ const handleDeleteCourse=async (id:string)=>{
       headerName: 'endDate',
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {new Date(params.row.endDate).toLocaleDateString('de-DE')}
+          {new Date(params.row.endDate).toLocaleDateString()}
         </Typography>
       )
     },
@@ -179,7 +179,7 @@ const handleDeleteCourse=async (id:string)=>{
     {
       flex: 0.1,
       field: 'edit',
-      minWidth: 80,
+      minWidth: 100,
       headerName: 'edit',
       renderCell: (params: GridRenderCellParams) => {
         const courseRow=params.row;
@@ -195,7 +195,7 @@ const handleDeleteCourse=async (id:string)=>{
   ]
 
   return (
-    <Card>
+    <Card >
       <CardHeader
         title='دوره ها'
         action={

@@ -14,11 +14,11 @@ const Home = () => {
            <Grid item xs={12}>
         <Card>
           <CardHeader title='لیست دوره ها'></CardHeader>
-          <CardContent>
+          <CardContent sx={{padding:2}}>
             <Typography>لیست دوره ها که در دوره های بامبو شرکت کردهاند.</Typography>
             
-          </CardContent>
         <CourseDataGrid/>
+          </CardContent>
         </Card>
       </Grid>
       <Grid item xs={12}>
@@ -36,8 +36,8 @@ const Home = () => {
           <CardContent>
             <Typography>لیست دانشجویانی که در دوره های بامبو شرکت کردهاند.</Typography>
             
-          </CardContent>
         <CrmTable/>
+          </CardContent>
         </Card>
       </Grid>
  
